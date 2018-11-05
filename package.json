@@ -11,7 +11,9 @@
   "dependencies": {
     "express": "^4.16.3",
     "knex": "^0.14.6",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0"
   },
   "scripts": {
     "test": "nodemon index.js",
