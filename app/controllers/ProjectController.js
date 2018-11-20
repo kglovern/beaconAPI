@@ -55,7 +55,23 @@ module.exports = {
    * @param params.id:Int -> ID corresponding to the project ID
    * @param body.userId:Int -> Id corresponding to the user to be added as editor
    */
-  addEditorToProject = async (req, res) => {
-    res.send('OK');
+  addEditorToProject: async (req, res) => {
+    const projectId = req.params.id;
+    const userId = req.body.userId;
+
+    try {
+      const editor = await db('ProjectEditor')
+        .insert({
+          project_id: projectId,
+          user_id: userId,
+        });
+      res.send(editor);
+    } catch (e) {
+      console.log(e);
+      res.status(503).send({
+        err: 'Error adding editor to project'
+      });
+    }
+
   },
 };
