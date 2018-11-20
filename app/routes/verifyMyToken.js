@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
       bearerToken = jwt.verify(token, 'secret');
       req.token = bearerToken;
       next();
-    } catch {
+    } catch (e) {
       res.sendStatus(403);
     }
 };
