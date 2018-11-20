@@ -3,52 +3,37 @@ const db = require(path.join(__model, 'database'));
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const verifyMyToken = require('../routes/verifyMyToken');
 
 module.exports = {
   authenticate: async (req, res) => {
-  	username = req.username
-  	password = req.password
+    //can't have '' in the fields
+  	username = req.query.username;
+    //can't start with the $
+  	password = req.query.password;
 
-  /*	bcrypt.hash('$#0U1DB3#4$#3D', saltRounds, function(err, hash) {
-		  // Store hash in your password DB.
-		  console.log(hash)
-		});*/
+  	//GET USER FROM DB
+  	user = await db.from('User').select().where({username: username});
 
-  	//GET USER FROM D
-  	user = await db.from('User').select().where({username: 'someuser'});
-  	console.log(user[0].password)
-    const match = bcrypt.compareSync('$#0U1DB3#4$#3D', user[0].password);
-    if(match) {
-    	console.log('yea')
+    if(user.length == 0) {
+      res.sendStatus(403);
     }
-    else{
-    	console.log('boo')
+    else {
+      const match = await bcrypt.compare(password, user[0].password);
+      console.log(user[0]);
+      if(match && user[0].is_active) {
+        const token = jwt.sign({ user: user.id }, 'secret');
+        res.json({
+          message: 'Authenticated',
+          token: token
+        });
+      }
+      else{
+        res.sendStatus(403);
+      }
     }
-  /*const user = {
-    id: 1, 
-    username: 'username',
-    email: 'name@email.com'
-  }*/
+    
 
-  const token = jwt.sign({ user: user.id }, 'secret');
-  res.json({
-    message: 'Authenticated',
-    userinfo: user,
-    token: token
-  });
-},/*
-	protect: (req, res)=> {
-		jwt.verify(req.token, 'secret', (err, authData) => {
-	    if(err) {
-	      res.sendStatus(403);
-	    } else {
-	      res.json({
-	        message: 'Post created...',
-	        authData
-	      });
-	    }
-	  });
-	},*/
+},
 };
 

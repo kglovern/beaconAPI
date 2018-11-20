@@ -6,4 +6,5 @@ const controller = require('../controllers/LoginController');
  */
 Router.get('/', controller.authenticate);
 
+
 module.exports = Router;
