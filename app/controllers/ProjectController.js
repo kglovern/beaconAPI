@@ -8,19 +8,54 @@ module.exports = {
    * @param res:Response -> Response object
    * @param: params.id:Int -> ID corresponding to the project ID
    */
-  getProjectByID: async (req, res) => {
+  getProjectById: async (req, res) => {
     try {
-      const projectData = await db('projects')
+      const projectData = await db('Project')
         .select()
         .where('id', req.params.id)
         .first();
       if (projectData) {
         res.send(projectData);
-      }  else {
-        res.status(403).send({ err: 'Unable to retrieve project with id ' + req.params.id })
+      } else {
+        res.status(403).send({
+          err: 'Unable to retrieve project with id ' + req.params.id
+        })
       }
     } catch (e) {
-      res.status(503).send({ err: 'Critical failure trying to retrieve project with id' + req.params.id });
+      console.log(e);
+      res.status(503).send({
+        err: 'Critical failure trying to retrieve project with id ' + req.params.id
+      });
     }
-  }
+  },
+  /**
+   * deleteProjectByID: Delete a specific project and all related information 
+   * @param req:Request -> Request meta data
+   * @param res:Response -> Response object
+   * @param: params.id:Int -> ID corresponding to the project ID
+   */
+  deleteProjectById: async (req, res) => {
+    try {
+      const result = await db('Project')
+        .delete()
+        .where('id', req.params.id);
+      console.log(result);
+      res.status(200).send();
+    } catch (e) {
+      console.log(e);
+      res.status(503).send({
+        err: 'Critical failure while deleting project with id ' + req.params.id
+      });
+    };
+  },
+  /**
+   * addEditorToProject: Associate a user with a project
+   * @param req:Request -> Request meta data
+   * @param res:Response -> Response object
+   * @param params.id:Int -> ID corresponding to the project ID
+   * @param body.userId:Int -> Id corresponding to the user to be added as editor
+   */
+  addEditorToProject = async (req, res) => {
+    res.send('OK');
+  },
 };
