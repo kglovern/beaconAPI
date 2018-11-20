@@ -1,9 +1,9 @@
 module.exports = {
   client: 'mysql',
   connection: {
-    host:       'localhost',
-    user:       'USERNAME',
-    password:   'PASSWORD',
-    database:   'DBNAME',
+    host:       'beaconds.cc',
+    user:       'databassist',
+    password:   'P0rkch0p',
+    database:   'Beacon',
   },
 };

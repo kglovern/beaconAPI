@@ -106,15 +106,16 @@ module.exports = {
    */
   getUserProjects: async (req, res) => {
     try {
-      const projects = await db('Projects')
+      const projects = await db('Project')
         .select()
-        .leftJoin('Project', 'Project.id', '')
+        .leftOuterJoin('ProjectEditor','ProjectEditor.project_id', 'Project.id')
         .where('ProjectEditor.user_id', req.params.id);
+      res.send(projects);
     } catch (e) {
+      console.log(e);
       res.status(503).send({
         err: 'Fatal error retrieving project list for user with id ' + req.params.id
       });
     }
-    res.send('Got id ' + req.params.id);
   }
 };
