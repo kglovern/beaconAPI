@@ -72,6 +72,25 @@ module.exports = {
         err: 'Error adding editor to project'
       });
     }
-
   },
+  /**
+   * @param req:Request -> Request meta data
+   * @param res:Response -> Response object
+   * @param params.id:Int -> ID corresponding to the project ID
+   * @param params.editorId:Int -> Id corresponding to the user to be removed as editor
+   */
+  removeEditorFromProject: async (req, res) => {
+    try {
+      const result = await db('ProjectEditor')
+        .delete()
+        .where('user_id', req.params.editorId)
+        .andWhere('project_id', req.params.id);
+      res.status(200).send();
+    } catch (e) {
+      console.log(e);
+      res.status(503).send({
+        err: 'Unable to remove editor with id ' + req.params.editorId + ' from project'
+      });
+    }
+  }
 };
