@@ -2,7 +2,7 @@ const path = require('path');
 const db = require(path.join(__model, 'database'));
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const verifyMyToken = require('../routes/verifyMyToken');
 
 module.exports = {
