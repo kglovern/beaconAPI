@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const express = require('express');
+const jwt = require('jsonwebtoken');
 const path = require('path');
 /* Individual route imports */
 const loginRoutes = require(path.join(__routes, 'loginRoutes'));
@@ -10,10 +12,10 @@ router.use('/login', loginRoutes);
 router.use('/user', userRoutes);
 router.use('/project', projectRoutes);
 
-
 /* Health check */
 router.get('/', (req, res) => {
   res.send({OK: 'API functioning'});
 });
 
 module.exports = router;
+

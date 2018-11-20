@@ -17,7 +17,6 @@ const routes = require('./app/routes');
 app.use('/v1', routes);
 
 
-
 /* Serve */
 app.listen(PORT, () => {
 
