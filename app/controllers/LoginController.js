@@ -12,7 +12,7 @@ module.exports = {
 
     //GET USER FROM DB
     user = await db.from('User')
-      .select()
+      .select(['id', 'password'])
       .where({
         username: username
       })
@@ -22,14 +22,14 @@ module.exports = {
       res.sendStatus(401);
     } else {
       const match = await bcrypt.compare(password, user.password);
-      console.log(user);
       if (match && user.is_active) {
         const token = jwt.sign({
           user: user.id
         }, 'secret');
         res.json({
           message: 'Authenticated',
-          token: token
+          token: token,
+          userId: user.id
         });
       } else {
         res.sendStatus(401);
