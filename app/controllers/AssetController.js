@@ -14,46 +14,46 @@ module.exports = {
 			 *@param body.is_shared -> boolean dictating whether an asset is shared
 			 */
 			createAsset: async (req, res) => {
-    	project_id = req.body.project_id
-    	owner_id = req.body.owner_id;
-			name = req.body.name;
-			is_shared = req.body.is_shared;
+	    	project_id = req.body.project_id
+	    	owner_id = req.body.owner_id;
+				name = req.body.name;
+				is_shared = req.body.is_shared;
 
-			path = __uploads + owner_id;
+				path = __uploads + owner_id;
 
-			if(!fs.existsSync(path)){
-				fs.mkdir(path);
-			}
-			var storage = multer.diskStorage({//set storage options
-			  destination: function (req, file, cb) {
-			    cb(null, path);
-			  },
-			  filename: function (req, file, cb) {
-			    cb(null, Date.now() + name); //TODO: update name
-			  }
-			});
-			var upload = multer({storage: storage});
-			upload.single(req.file);
+				if(!fs.existsSync(path)){
+					fs.mkdir(path);
+				}
+				var storage = multer.diskStorage({//set storage options
+				  destination: function (req, file, cb) {
+				    cb(null, path);
+				  },
+				  filename: function (req, file, cb) {
+				    cb(null, Date.now() + name); //TODO: update name
+				  }
+				});
+				var upload = multer({storage: storage});
+				upload.single(req.file);
 
-	},
-	getAssetInfo: async (req, res) => {
-    	assetId = req.query.id
+			},
+			getAssetInfo: async (req, res) => {
+	    	assetId = req.query.id
 
-    	//look up asset in database
-    	assets = await db.from('Asset').select().where({
-      		assetId: id
-    	}).first();
+	    	//look up asset in database
+	    	assets = await db.from('Asset').select().where({
+	      		assetId: id
+	    	}).first();
 
-    	//asset not found
-    	if (assets.length == 0) {
-      		res.json({
-        		message: 'this asset does not exist'
-      		});
-      	}
+	    	//asset not found
+	    	if (assets.length == 0) {
+	      		res.json({
+	        		message: 'this asset does not exist'
+	      		});
+	      	}
 
-    	res.json({
-      		assets
-      	});
+	    	res.json({
+	      		assets
+	      	});
     },
 
   },

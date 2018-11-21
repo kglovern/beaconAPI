@@ -1,6 +1,6 @@
 const path = require('path');
 const Router = require('express').Router();
-const controller = require(path.join(__ctrl, 'UserController'));
+const controller = require(path.join(__ctrl, 'AssetController'));
 const verifyMyToken = require('../routes/verifyMyToken');
 
 /* ROUTE: '/asset'
