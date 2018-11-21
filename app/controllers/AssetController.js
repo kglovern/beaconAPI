@@ -18,8 +18,10 @@ module.exports = {
 	    	owner_id = req.body.owner_id;
 				name = req.body.name;
 				is_shared = req.body.is_shared;
+				file = req.file;
 
 				path = __uploads + owner_id;
+				filename = Date.now() + file.encoding;
 
 				if(!fs.existsSync(path)){
 					fs.mkdir(path);
@@ -29,26 +31,39 @@ module.exports = {
 				    cb(null, path);
 				  },
 				  filename: function (req, file, cb) {
-				    cb(null, Date.now() + name); //TODO: update name
+				    cb(null, name);
 				  }
 				});
 				var upload = multer({storage: storage});
 				upload.single(req.file);
 
+
 				try{
-					const result = db('Asset')
-					.
+					const result = await db('Asset')
+					.insert({
+						project_id: project_id,
+						owner_id: owner_id,
+						filepath: path,
+						name: name,
+						type: file.encoding,
+						size: file.size,
+						is_shared: is_shared
+					});
 				}
-				catch();
+				catch (e) {
+				 console.log(e);
+				 res.status(503).send({
+					 err: 'Critical failure trying to retrieve project with id ' + project_id
+				 });
 			},
 			/*
 			 *getAssetInfo: retrieve an asset database entry
 			 *@param req:Request -> Request meta data
 			 *@param res:Response -> Response object
-			 *@param body.id -> the asset ID
+			 *@param params.id -> the asset ID
 			 */
 			getAssetInfo: async (req, res) => {
-	    	assetId = req.body.id
+	    	assetId = req.param.id
 
 	    	//look up asset in database
 	    	assets = await db.from('Asset').select().where({
@@ -60,7 +75,7 @@ module.exports = {
 	      		res.json({
 	        		message: 'this asset does not exist'
 	      		});
-	      	}
+	      }
 
 	    	res.json({
 	      		assets
@@ -72,7 +87,7 @@ module.exports = {
 			 *@param body.id -> the asset ID
 			 */
 			deleteAsset: async (req, res) => {
-				//finish this 
+				//finish this
 			},
 
   },
