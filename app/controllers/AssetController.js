@@ -10,7 +10,6 @@ module.exports = {
     	owner_id = req.query.owner_id
 			path = './uploads/' + owner_id;
 
-    	//Need to finish
 			if(!fs.existsSync(path)){
 				fs.mkdir(path);
 			}
@@ -22,7 +21,8 @@ module.exports = {
 			    cb(null, Date.now())
 			  }
 			});
-
+			var upload = multer({storage: storage});
+			upload.single(req.file);
 
 	},
 	getAssetInfo: async (req, res) => {
