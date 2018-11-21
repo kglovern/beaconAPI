@@ -37,7 +37,6 @@ module.exports = {
 				var upload = multer({storage: storage});
 				upload.single(req.file);
 
-
 				try{
 					const result = await db('Asset')
 					.insert({
@@ -55,6 +54,7 @@ module.exports = {
 				 res.status(503).send({
 					 err: 'Critical failure trying to retrieve project with id ' + project_id
 				 });
+			 }
 			},
 			/*
 			 *getAssetInfo: retrieve an asset database entry
@@ -87,8 +87,11 @@ module.exports = {
 			 *@param body.id -> the asset ID
 			 */
 			deleteAsset: async (req, res) => {
-				//finish this
+				assetId = req.param.id;
+				const result = await db('Asset')
+					.delete()
+					.where(id, assetId);
+				console.log(result);
 			},
 
-  },
-};
+  };
