@@ -7,6 +7,7 @@ global.configDir = path.join(__dirname, 'config');
 global.__model = path.join(__dirname, 'app/models');
 global.__routes = path.join(__dirname, 'app/routes');
 global.__ctrl = path.join(__dirname, 'app/controllers');
+global.__uploads = path.join(__dirname, 'uploads/');
 
 const app = express();
 
