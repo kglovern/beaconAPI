@@ -32,5 +32,10 @@ module.exports = {
         res.sendStatus(403);
       }
     }
+<<<<<<< HEAD
   },
 };
+=======
+};
+
+>>>>>>> c0bd6d40208aaed7fd51c2b756b99a7f5bd21f61
