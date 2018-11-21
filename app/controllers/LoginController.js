@@ -18,7 +18,7 @@ module.exports = {
       })
       .first();
 
-    if (user.length == 0) {
+    if (!user) {
       res.sendStatus(403);
     } else {
       const match = await bcrypt.compare(password, user.password);
