@@ -32,7 +32,7 @@ module.exports = {
       res.send(project);
     } catch (e) {
       console.log(e);
-      res.status(500).send('')
+      res.status(500).send('Critical failure when creating a new project object');
     }
   },
   /**
@@ -43,6 +43,20 @@ module.exports = {
    */
   updateProjectById: async (req, res) => {
     const projectId = req.params.id;
+    try {
+      const project = await db('Project')
+        .where('id', projectId)
+        .update({
+          name: req.body.name,
+          width: req.body.width,
+          height: req.body.height,
+          is_active: req.body.is_active
+        });
+      res.status(200).send();
+    } catch (e) {
+      console.log(e);
+      res.status(500).send('Critical failure editing project with id ' + req.params.id);
+    }
   },
   /**
    * getProjectById: Retrieve data for a single project and return it as a JSON object
