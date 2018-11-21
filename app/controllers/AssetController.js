@@ -6,8 +6,8 @@ const multer = require('multer');
 
 module.exports = {
 	createAsset: async (req, res) => {
-    	project_id = req.query.project_id
-    	owner_id = req.query.owner_id
+    	project_id = req.body.project_id
+    	owner_id = req.body.owner_id
 			path = './uploads/' + owner_id;
 
 			if(!fs.existsSync(path)){
@@ -23,6 +23,16 @@ module.exports = {
 			});
 			var upload = multer({storage: storage});
 			upload.single(req.file);
+
+		db('Asset').insert({
+        	project_id: project_id
+        	owner_id: owner_id
+        	filepath: path
+        	name = Date.now()
+        	type = '.ext'
+        	
+        });
+
 
 	},
 	getAssetInfo: async (req, res) => {
