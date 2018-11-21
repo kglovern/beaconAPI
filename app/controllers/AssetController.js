@@ -35,9 +35,20 @@ module.exports = {
 				var upload = multer({storage: storage});
 				upload.single(req.file);
 
+				try{
+					const result = db('Asset')
+					.
+				}
+				catch();
 			},
+			/*
+			 *getAssetInfo: retrieve an asset database entry
+			 *@param req:Request -> Request meta data
+			 *@param res:Response -> Response object
+			 *@param body.id -> the asset ID
+			 */
 			getAssetInfo: async (req, res) => {
-	    	assetId = req.query.id
+	    	assetId = req.body.id
 
 	    	//look up asset in database
 	    	assets = await db.from('Asset').select().where({
@@ -54,7 +65,15 @@ module.exports = {
 	    	res.json({
 	      		assets
 	      	});
-    },
+    	},
+			/*deleteAsset: remove an asset from the system
+			 *@param req:Request -> Request meta data
+			 *@param res:Response -> Response object
+			 *@param body.id -> the asset ID
+			 */
+			deleteAsset: async (req, res) => {
+				//finish this 
+			},
 
   },
 };
