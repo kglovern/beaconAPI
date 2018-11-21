@@ -19,7 +19,7 @@ module.exports = {
       .first();
 
     if (!user) {
-      res.sendStatus(403);
+      res.sendStatus(401);
     } else {
       const match = await bcrypt.compare(password, user.password);
       console.log(user);
@@ -32,7 +32,7 @@ module.exports = {
           token: token
         });
       } else {
-        res.sendStatus(403);
+        res.sendStatus(401);
       }
     }
   },
