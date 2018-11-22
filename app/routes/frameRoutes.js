@@ -8,9 +8,22 @@ const verifyMyToken = require('../routes/verifyMyToken');
  */
 Router.post('/', verifyMyToken, controller.createFrame);
 
-Router.get('/:frameId', verifyMyToken, controller.getFrameInfo);
+/**
+ *  Get data for a single frame
+ *  @param id -> frameId: identifier for the frame
+ */
+Router.get('/:frameId', verifyMyToken, controller.getFrameById);
 
-Router.delete('/:frameId', verifyMyToken, controller.deleteFrame);
+/**
+ *  Delete entry for a single Frame
+ *  @param id -> frame.id: identifier for the frame
+ */
+Router.delete('/:frameId', verifyMyToken, controller.deleteFrameById);
 
+/**
+ *  Update the values of a single frame
+ *  @param id -> frame.id: identifier for the frame to update
+ */
+Router.patch('/:id', controller.updateFrameById);
 
 module.exports = Router;
