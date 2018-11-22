@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 // Added body-parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: false
 }));
 
 const PORT = process.env.PORT || 3000;
