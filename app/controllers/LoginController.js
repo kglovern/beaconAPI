@@ -12,7 +12,7 @@ module.exports = {
 
     //GET USER FROM DB
     user = await db.from('User')
-      .select(['id', 'password'])
+      .select(['id', 'password', 'is_active'])
       .where({
         username: username
       })
