@@ -52,7 +52,17 @@ module.exports = {
    */
   getFrameById: async (req, res) => {
     try {
-
+      const frameData = await db('Frame')
+        .select()
+        .where('id', req.params.id)
+        .first();
+      if (frameData) {
+        res.send(frameData);
+      } else {
+        res.status(403).send({
+          err: 'Unable to retrieve project with id ' + req.params.id
+        });
+      }
     } catch (e) {
       console.log(e);
       res.status(500).send({
