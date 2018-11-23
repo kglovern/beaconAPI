@@ -14,13 +14,12 @@ module.exports = {
        *@param body.is_shared -> boolean dictating whether an asset is shared
        */
       createAsset: async (req, res) => {
-        console.log(req.body)
-        project_id = req.body.project_id;
         if(!req.body.project_id){
-            res.status(503).send({
-              err: 'project_id is undefined'
-            });
-            return;
+          res.status(503).send({
+            err: 'req.body.project_id is undefined'
+          });
+          console.log(req.body);
+          return;
         }
         owner_id = req.body.owner_id;
         if(!owner_id){
