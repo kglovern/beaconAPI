@@ -6,11 +6,11 @@ const verifyMyToken = require('../routes/verifyMyToken');
 /* ROUTE: '/asset'
  * Available verbs: get, post, patch, delete
  */
-Router.post('/', verifyMyToken, controller.createAsset);
+Router.post('/', controller.createAsset);
 
-Router.get('/:assetId', verifyMyToken, controller.getAssetInfo);
+Router.get('/:assetId', controller.getAssetInfo);
 
-Router.delete('/:assetId', verifyMyToken, controller.deleteAsset);
+Router.delete('/:assetId', controller.deleteAsset);
 /**
  *  Get all projects for which the user is an owner or editor
  *  @param id:Int -> Identifier for the user

@@ -18,17 +18,17 @@ module.exports = {
 	    	owner_id = req.body.owner_id;
 				name = req.body.name;
 				is_shared = req.body.is_shared;
-				file = req.file;
+				file = req.body.file;
 
-				path = __uploads + owner_id;
+				filepath = __uploads + owner_id;
 				filename = Date.now() + file.encoding;
 
-				if(!fs.existsSync(path)){
-					fs.mkdir(path);
+				if(!fs.existsSync(filepath)){
+					fs.mkdir(filepath);
 				}
 				var storage = multer.diskStorage({//set storage options
 				  destination: function (req, file, cb) {
-				    cb(null, path);
+				    cb(null, filepath);
 				  },
 				  filename: function (req, file, cb) {
 				    cb(null, name);
@@ -42,7 +42,7 @@ module.exports = {
 					.insert({
 						project_id: project_id,
 						owner_id: owner_id,
-						filepath: path,
+						filepath: filepath,
 						name: name,
 						type: file.encoding,
 						size: file.size,
