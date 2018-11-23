@@ -78,7 +78,11 @@ module.exports = {
    */
   deleteFrameById: async (req, res) => {
     try {
-
+      const result = await db('Frame')
+        .delete()
+        .where('id', req.params.id);
+      console.log(result);
+      res.status(200).send();
     } catch (e) {
       console.log(e);
       res.status(500).send({
