@@ -64,34 +64,65 @@ module.exports = {
 			 */
 			getAssetInfo: async (req, res) => {
 	    	assetId = req.param.id
+        try{
+          result = await db('Asset')
+          .insert({
+            project_id: project_id,
+            owner_id: owner_id,
+            filepath: filepath,
+            name: name,
+            type: file.encoding,
+            size: file.size,
+            is_shared: is_shared
+          });
+        }
+        catch (e) {
+         console.log(e);
+         res.status(503).send({
+           err: 'Critical failure trying to retrieve project with id ' + project_id
+         });
+       }
+      },
+      /*
+       *getAssetInfo: retrieve an asset database entry
+       *@param req:Request -> Request meta data
+       *@param res:Response -> Response object
+       *@param params.id -> the asset ID
+       */
+      getAssetInfo: async (req, res) => {
+        assetId = req.param.id
 
-	    	//look up asset in database
-	    	assets = await db.from('Asset').select().where({
-	      		assetId: id
-	    	}).first();
+        //look up asset in database
+        assets = await db.from('Asset').select().where({
+            assetId: id
+        }).first();
 
-	    	//asset not found
-	    	if (assets.length == 0) {
-	      		res.json({
-	        		message: 'this asset does not exist'
-	      		});
-	      }
+        //asset not found
+        if (assets.length == 0) {
+            res.json({
+              message: 'this asset does not exist'
+            });
+        }
 
-	    	res.json({
-	      		assets
-	      	});
-    	},
-			/*deleteAsset: remove an asset from the system
-			 *@param req:Request -> Request meta data
-			 *@param res:Response -> Response object
-			 *@param body.id -> the asset ID
-			 */
-			deleteAsset: async (req, res) => {
-				assetId = req.param.id;
-				const result = await db('Asset')
-					.delete()
-					.where(id, assetId);
-				console.log(result);
-			},
+        res.json({
+            assets
+          });
+      },
+      /*deleteAsset: remove an asset from the system
+       *@param req:Request -> Request meta data
+       *@param res:Response -> Response object
+       *@param body.id -> the asset ID
+       */
+      deleteAsset: async (req, res) => {
+        assetId = req.param.id;
+        try{
+          const result = await db('Asset')
+          .delete()
+          .where(id, assetId);
+          console.log(result);
+        } catch (e) {
+          console.log('Error deleting asset $(assetId)');
+        }
+      },
 
   };
