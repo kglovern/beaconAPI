@@ -24,21 +24,25 @@ module.exports = {
         if(!owner_id){
           res.status(503).send({
             err: 'owner_id is undefined'
+          });
         }
         name = req.body.name;
         if(!name){
           res.status(503).send({
             err: 'name is undefined'
+          });
         }
         is_shared = req.body.is_shared;
         if(!is_shared){
           res.status(503).send({
             err: 'is_shared is undefined'
+          });
         }
         file = req.file;
         if(!file){
           res.status(503).send({
             err: 'file is undefined'
+          });
         }
 
 
