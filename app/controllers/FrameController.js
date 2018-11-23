@@ -65,7 +65,7 @@ module.exports = {
         res.send(frameData);
       } else {
         res.status(403).send({
-          err: 'Unable to retrieve project with id ' + req.params.id
+          err: 'Unable to retrieve frame with id ' + req.params.id
         });
       }
     } catch (e) {
@@ -83,10 +83,23 @@ module.exports = {
    */
   deleteFrameById: async (req, res) => {
     try {
-      const result = await db('Frame')
-        .delete()
-        .where('id', req.params.id);
-      console.log(result);
+      const frameToDelete = await db('Frame')
+        .select()
+        .where('id', req.params.id)
+        .first();
+      if (frameToDelete) {
+        console.log(frameToDelete);
+        const updateResult = await db('Frame')
+          .where('position', '>', frameToDelete.position)
+          .andWhere('project_id', frameToDelete.project_id)
+          .decrement('position', 1);
+        console.log(updateResult);
+        const result = await db('Frame')
+          .delete()
+          .where('id', req.params.id);
+        console.log(result);
+      }
+      
       res.status(200).send();
     } catch (e) {
       console.log(e);
