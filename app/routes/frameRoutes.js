@@ -6,19 +6,19 @@ const verifyMyToken = require('../routes/verifyMyToken');
 /* ROUTE: '/frame'
  * Available verbs: get, post, patch, delete
  */
-Router.post('/', verifyMyToken, controller.createFrame);
+Router.post('/', controller.createFrame);
 
 /**
  *  Get data for a single frame
  *  @param id -> frameId: identifier for the frame
  */
-Router.get('/:frameId', verifyMyToken, controller.getFrameById);
+Router.get('/:frameId', controller.getFrameById);
 
 /**
  *  Delete entry for a single Frame
  *  @param id -> frame.id: identifier for the frame
  */
-Router.delete('/:frameId', verifyMyToken, controller.deleteFrameById);
+Router.delete('/:frameId', controller.deleteFrameById);
 
 /**
  *  Update the values of a single frame

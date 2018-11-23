@@ -12,7 +12,23 @@ module.exports = {
    * @param res:Response -> Response object
    */
   createFrame: async (req, res) => {
-    
+    const projectId = req.body.project_id;
+    const frameAmount = req.body.frame_amount;
+    try {
+      let frame = await db('Frame')
+        .insert({
+          project_id: projectId,
+          position: frameAmount,
+          bg_colour: req.body.bg_colour,
+          transition_time: req.body.transition_time,
+          expiry_date: req.body.expiry_date,
+        });
+      const frameId = frame;
+      res.send(frameId);
+    } catch (e) {
+      console.log(e);
+      res.status(500).send('Critical failure when creating a new project object');
+    }
   },
   /**
    * updateFrameById: patch an existing frame from form data
