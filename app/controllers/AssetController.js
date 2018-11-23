@@ -5,20 +5,50 @@ const fs = require('fs');
 const multer = require('multer');
 
 module.exports = {
-			/*createAsset: create a new asset, save it to storage and update database
-			 *@param req:Request -> Request meta data
-			 *@param res:Response -> Response object
-			 *@param body.project_id -> project_id associated with asset
-			 *@param body.owner_id -> the user that is uploading the asset
-			 *@param body.name -> the filename of the asset
-			 *@param body.is_shared -> boolean dictating whether an asset is shared
-			 */
-			createAsset: async (req, res) => {
-	    	project_id = req.body.project_id
-	    	owner_id = req.body.owner_id;
-				name = req.body.name;
-				is_shared = req.body.is_shared;
-				file = req.body.file;
+      /*createAsset: create a new asset, save it to storage and update database
+       *@param req:Request -> Request meta data
+       *@param res:Response -> Response object
+       *@param body.project_id -> project_id associated with asset
+       *@param body.owner_id -> the user that is uploading the asset
+       *@param body.name -> the filename of the asset
+       *@param body.is_shared -> boolean dictating whether an asset is shared
+       */
+      createAsset: async (req, res) => {
+        project_id = req.body.project_id
+        if(!project_id){
+            res.status(503).send({
+              err: 'project_id is undefined'
+            });
+            return;
+        }
+        owner_id = req.body.owner_id;
+        if(!owner_id){
+          res.status(503).send({
+            err: 'owner_id is undefined'
+          });
+          return;
+        }
+        name = req.body.name;
+        if(!name){
+          res.status(503).send({
+            err: 'name is undefined'
+          });
+          return;
+        }
+        is_shared = req.body.is_shared;
+        if(!is_shared){
+          res.status(503).send({
+            err: 'is_shared is undefined'
+          });
+          return;
+        }
+        file = req.file;
+        if(!file){
+          res.status(503).send({
+            err: 'file is undefined'
+          });
+          return;
+        }
 
 				filepath = __uploads + owner_id;
 				filename = Date.now() + file.encoding;
