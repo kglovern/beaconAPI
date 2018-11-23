@@ -88,7 +88,6 @@ module.exports = {
         .where('id', req.params.id)
         .first();
       if (frameToDelete) {
-        console.log(frameToDelete);
         const updateResult = await db('Frame')
           .where('position', '>', frameToDelete.position)
           .andWhere('project_id', frameToDelete.project_id)
