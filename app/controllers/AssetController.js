@@ -19,30 +19,35 @@ module.exports = {
             res.status(503).send({
               err: 'project_id is undefined'
             });
+            return;
         }
         owner_id = req.body.owner_id;
         if(!owner_id){
           res.status(503).send({
             err: 'owner_id is undefined'
           });
+          return;
         }
         name = req.body.name;
         if(!name){
           res.status(503).send({
             err: 'name is undefined'
           });
+          return;
         }
         is_shared = req.body.is_shared;
         if(!is_shared){
           res.status(503).send({
             err: 'is_shared is undefined'
           });
+          return;
         }
         file = req.file;
         if(!file){
           res.status(503).send({
             err: 'file is undefined'
           });
+          return;
         }
 
 
