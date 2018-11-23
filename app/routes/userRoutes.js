@@ -11,6 +11,8 @@ Router.post('/', verifyMyToken, controller.createUser);
 Router.get('/:userId', verifyMyToken, controller.getUserInfo);
 
 Router.delete('/:userId', verifyMyToken, controller.deleteUser);
+
+Router.patch('/:userId', verifyMyToken, controller.updateUser);
 /**
  *  Get all projects for which the user is an owner or editor
  *  @param id:Int -> Identifier for the user
