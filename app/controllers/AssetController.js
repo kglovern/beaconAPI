@@ -2,7 +2,26 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 const verifyMyToken = require('../routes/verifyMyToken');
 const fs = require('fs');
+const db = require(path.join(__model, 'database'));
 const multer = require('multer');
+
+//create the storage engine
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    filepath = __uploads + req.body.owner_id;
+    if(!fs.existsSync(filepath)){
+      fs.mkdir(filepath);
+    }
+    cb(null, filepath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '.' + path.extname(file.originalname));
+  }
+});
+//create the upload object
+let upload = multer({storage: storage});
+
+
 
 module.exports = {
       /*createAsset: create a new asset, save it to storage and update database
@@ -14,13 +33,7 @@ module.exports = {
        *@param body.is_shared -> boolean dictating whether an asset is shared
        */
       createAsset: async (req, res) => {
-        if(!req.body.project_id){
-          res.status(503).send({
-            err: 'req.body.project_id is undefined'
-          });
-          console.log(req.body);
-          return;
-        }
+        console.log(req.file);
         project_id = req.body.project_id
         if(!project_id){
             res.status(503).send({
@@ -56,25 +69,6 @@ module.exports = {
           });
           return;
         }
-
-
-        filepath = __uploads + owner_id;
-        filename = Date.now() + req.body.encoding;
-
-        if(!fs.existsSync(filepath)){
-          fs.mkdir(filepath);
-        }
-        var storage = multer.diskStorage({//set storage options
-          destination: function (req, file, cb) {
-            cb(null, filepath);
-          },
-          filename: function (req, file, cb) {
-            cb(null, name);
-          }
-        });
-        var upload = multer({storage: storage});
-        upload.single(req.file);
-
         try{
           result = await db('Asset')
           .insert({
@@ -83,7 +77,7 @@ module.exports = {
             filepath: filepath,
             name: name,
             type: file.encoding,
-            size: file.size,
+            file_size: file.size,
             is_shared: is_shared
           });
         }
@@ -93,6 +87,13 @@ module.exports = {
            err: 'Critical failure trying to retrieve project with id ' + project_id
          });
        }
+      },
+      /*
+       *upload: retrieve the upload object
+       *@return upload -> the multer middleware upload object
+       */
+      upload: () => {
+        return upload;
       },
       /*
        *getAssetInfo: retrieve an asset database entry
