@@ -37,7 +37,12 @@ module.exports = {
    * @param: params.id:Int -> ID corresponding to the frame ID
    */
   updateFrameById: async (req, res) => {
-    
+    try {
+
+    } catch (e) {
+      console.log(e);
+      res.status(500).send('Critical failure when creating a new project object');
+    }
   },
   /**
    * getFrameById: Retrieve data for a single frame and return it as a JSON object
@@ -46,7 +51,12 @@ module.exports = {
    * @param: params.id:Int -> ID corresponding to the frame ID
    */
   getFrameById: async (req, res) => {
-    
+    try {
+
+    } catch (e) {
+      console.log(e);
+      res.status(500).send('Critical failure when creating a new project object');
+    }
   },
   /**
    * deleteFrameByID: Delete a specific frame and all related information 
@@ -55,6 +65,11 @@ module.exports = {
    * @param: params.id:Int -> ID corresponding to the frame ID
    */
   deleteFrameById: async (req, res) => {
-    
+    try {
+
+    } catch (e) {
+      console.log(e);
+      res.status(500).send('Critical failure when creating a new project object');
+    }
   },
 };
