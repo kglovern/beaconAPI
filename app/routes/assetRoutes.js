@@ -1,12 +1,14 @@
 const path = require('path');
 const Router = require('express').Router();
 const controller = require(path.join(__ctrl, 'AssetController'));
+const multer = require('multer');
+let upload = multer();
 //const verifyMyToken = require('../routes/verifyMyToken');
 
 /* ROUTE: '/asset'
  * Available verbs: get, post, delete
  */
-Router.post('/', controller.createAsset);
+Router.post('/', upload.single(), controller.createAsset);
 
 Router.get('/:assetId', controller.getAssetInfo);
 
