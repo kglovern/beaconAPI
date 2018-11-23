@@ -37,11 +37,20 @@ module.exports = {
    * @param: params.id:Int -> ID corresponding to the frame ID
    */
   updateFrameById: async (req, res) => {
+    const frameId = req.params.id
     try {
-
+      const frame = await db('Frame')
+        .where('id', frameId)
+        .update({
+          position: req.body.position,
+          bg_colour: req.body.bg_colour,
+          transition_time: req.body.transition_time,
+          expiry_date: req.body.expiry_date,
+        });
+      res.status(200).send();
     } catch (e) {
       console.log(e);
-      res.status(500).send('Critical failure editing frame with id ' + req.params.id);
+      res.status(500).send('Critical failure editing frame with id ' + frameId);
     }
   },
   /**
