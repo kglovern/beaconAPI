@@ -15,20 +15,42 @@ module.exports = {
        */
       createAsset: async (req, res) => {
         project_id = req.body.project_id
+        if(!project_id){
+            res.status(503).send({
+              err: 'project_id is undefined'
+            });
+        }
         owner_id = req.body.owner_id;
+        if(!owner_id){
+          res.status(503).send({
+            err: 'owner_id is undefined'
+        }
         name = req.body.name;
+        if(!name){
+          res.status(503).send({
+            err: 'name is undefined'
+        }
         is_shared = req.body.is_shared;
+        if(!is_shared){
+          res.status(503).send({
+            err: 'is_shared is undefined'
+        }
         file = req.file;
+        if(!file){
+          res.status(503).send({
+            err: 'file is undefined'
+        }
 
-        path = __uploads + owner_id;
-        filename = Date.now() + file.encoding;
 
-        if(!fs.existsSync(path)){
-          fs.mkdir(path);
+        filepath = __uploads + owner_id;
+        filename = Date.now() + req.body.encoding;
+
+        if(!fs.existsSync(filepath)){
+          fs.mkdir(filepath);
         }
         var storage = multer.diskStorage({//set storage options
           destination: function (req, file, cb) {
-            cb(null, path);
+            cb(null, filepath);
           },
           filename: function (req, file, cb) {
             cb(null, name);
@@ -38,11 +60,11 @@ module.exports = {
         upload.single(req.file);
 
         try{
-          const result = await db('Asset')
+          result = await db('Asset')
           .insert({
             project_id: project_id,
             owner_id: owner_id,
-            filepath: path,
+            filepath: filepath,
             name: name,
             type: file.encoding,
             size: file.size,
@@ -88,10 +110,14 @@ module.exports = {
        */
       deleteAsset: async (req, res) => {
         assetId = req.param.id;
-        const result = await db('Asset')
+        try{
+          const result = await db('Asset')
           .delete()
           .where(id, assetId);
-        console.log(result);
+          console.log(result);
+        } catch (e) {
+          console.log('Error deleting asset $(assetId)');
+        }
       },
 
   };
