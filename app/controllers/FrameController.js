@@ -27,7 +27,7 @@ module.exports = {
       res.send(frameId);
     } catch (e) {
       console.log(e);
-      res.status(500).send('Critical failure when creating a new project object');
+      res.status(500).send('Critical failure when creating a new frame object');
     }
   },
   /**
@@ -41,7 +41,7 @@ module.exports = {
 
     } catch (e) {
       console.log(e);
-      res.status(500).send('Critical failure when creating a new project object');
+      res.status(500).send('Critical failure editing frame with id ' + req.params.id);
     }
   },
   /**
@@ -55,7 +55,9 @@ module.exports = {
 
     } catch (e) {
       console.log(e);
-      res.status(500).send('Critical failure when creating a new project object');
+      res.status(500).send({
+        err: 'Critical failure trying to retrieve frame with id ' + req.params.id
+      });
     }
   },
   /**
@@ -69,7 +71,9 @@ module.exports = {
 
     } catch (e) {
       console.log(e);
-      res.status(500).send('Critical failure when creating a new project object');
+      res.status(500).send({
+        err: 'Critical failure while deleting frame with id ' + req.params.id
+      });
     }
   },
 };
