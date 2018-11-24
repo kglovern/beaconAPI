@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const verifyMyToken = require('../routes/verifyMyToken');
 const fs = require('fs');
 const multer = require('multer');
+const db = require(path.join(__model, 'database'));
 
 module.exports = {
       /*createAsset: create a new asset, save it to storage and update database
@@ -14,9 +15,11 @@ module.exports = {
        *@param body.is_shared -> boolean dictating whether an asset is shared
        */
       createAsset: async (req, res) => {
-        if(!req.body.project_id){
+        console.log(req.body);
+        project_id = req.body.project_id
+        if(!project_id){
           res.status(503).send({
-            err: 'req.body.project_id is undefined'
+            err: 'project_id is undefined'
           });
           console.log(req.body);
           return;
@@ -67,6 +70,13 @@ module.exports = {
 				var upload = multer({storage: storage});
 				upload.single(req.file);
 
+        //get file type - .jpg, .mp4, .png
+        //let image = {png, jpg}
+        //let video = {avi, mp4}
+        //if part of video / image, set type
+
+
+
 				try{
 					const result = await db('Asset')
 					.insert({
@@ -75,7 +85,7 @@ module.exports = {
 						filepath: filepath,
 						name: name,
 						type: file.encoding,
-						size: file.size,
+						file_size: file.size,
 						is_shared: is_shared
 					});
 				}
