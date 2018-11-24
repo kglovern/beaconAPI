@@ -63,6 +63,20 @@ module.exports = {
           return;
         }
         file = req.file;
+
+        //Get file ending to determine video type
+        let video = ['.avi','.mp4']
+        let photo = ['.jpg', '.jpeg', '.png']
+        if (video.indexOf(path.extname(file.originalname)) >= 0){
+          file.encoding = 'video'
+        }
+        else if (photo.indexOf(path.extname(file.originalname)) >= 0){
+          file.encoding = 'photo'
+        }
+        else {
+          file.encoding = 'file ending not recognized as video or photo'
+        }
+
         if(!file){
           res.status(503).send({
             err: 'file is undefined'
