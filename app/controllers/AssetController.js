@@ -4,7 +4,6 @@ const verifyMyToken = require('../routes/verifyMyToken');
 const fs = require('fs');
 const db = require(path.join(__model, 'database'));
 const multer = require('multer');
-const db = require(path.join(__model, 'database'));
 
 //create the storage engine
 let storage = multer.diskStorage({
@@ -70,58 +69,6 @@ module.exports = {
           });
           return;
         }
-
-				filepath = __uploads + owner_id;
-				filename = Date.now() + file.encoding;
-
-				if(!fs.existsSync(filepath)){
-					fs.mkdir(filepath);
-				}
-				var storage = multer.diskStorage({//set storage options
-				  destination: function (req, file, cb) {
-				    cb(null, filepath);
-				  },
-				  filename: function (req, file, cb) {
-				    cb(null, name);
-				  }
-				});
-				var upload = multer({storage: storage});
-				upload.single(req.file);
-
-        //get file type - .jpg, .mp4, .png
-        //let image = {png, jpg}
-        //let video = {avi, mp4}
-        //if part of video / image, set type
-
-
-
-				try{
-					const result = await db('Asset')
-					.insert({
-						project_id: project_id,
-						owner_id: owner_id,
-						filepath: filepath,
-						name: name,
-						type: file.encoding,
-						file_size: file.size,
-						is_shared: is_shared
-					});
-				}
-				catch (e) {
-				 console.log(e);
-				 res.status(503).send({
-					 err: 'Critical failure trying to retrieve project with id ' + project_id
-				 });
-			 }
-			},
-			/*
-			 *getAssetInfo: retrieve an asset database entry
-			 *@param req:Request -> Request meta data
-			 *@param res:Response -> Response object
-			 *@param params.id -> the asset ID
-			 */
-			getAssetInfo: async (req, res) => {
-	    	assetId = req.param.id
         try{
           result = await db('Asset')
           .insert({
