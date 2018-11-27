@@ -9,9 +9,9 @@ module.exports = {
   createUser: async (req, res) => {
     date = new Date()
 
-    username = req.query.username
-    password = req.query.password
-    email = req.query.email
+    username = req.body.username
+    password = req.body.password
+    email = req.body.email
 
     checkDuplicate = await db.from('User').select().where({
       username: username
@@ -19,8 +19,7 @@ module.exports = {
 
     if (checkDuplicate.length != 0) {
       //if the username already exists
-      console.log("user already exists!")
-      res.status(500).send({
+      res.status(503).send({
         error: "username already exists"
       });
     } else {
@@ -52,18 +51,18 @@ module.exports = {
     }
   },
   getUserInfo: async (req, res) => {
-    userId = req.query.userId
+    userId = req.params.userId
 
     users = await db.from('User').select().where({
       id: userId
     });
 
     if (users.length == 0) {
-      res.json({
-        message: 'this user does not exists'
+      res.status(503).send({
+        error: "username does not exists"
       });
-    }
 
+    }
     user = users[0];
 
     res.json({
@@ -74,17 +73,15 @@ module.exports = {
     });
   },
   deleteUser: async (req, res) => {
-    userId = req.query.userId
-    console.log(userId)
+    userId = req.params.userId
 
     users = await db.from('User').select().where({
       id: userId
     });
 
     if (users.length == 0) {
-      console.log('user does not exists')
-      res.json({
-        message: 'this user does not exists'
+      res.status(503).send({
+        error: "username does not exists"
       });
     } else {
       temp = await db('User').where({
@@ -93,9 +90,58 @@ module.exports = {
         is_active: 0
       });
 
-      console.log(users)
       res.json({
-        users
+        message: "user successfully deleted"
+      });
+    }
+  },
+  updateUser: async (req, res) => {
+    userId = req.params.userId;
+
+    date = new Date();
+
+    console.log(req.body);
+
+    username = req.body.username;
+    password = req.body.password;
+    email = req.body.email;
+
+    users = await db.from('User').select().where({
+      id: userId
+    });
+
+    //if user id doesn't exist
+    if (users.length == 0) {
+      res.status(503).send({
+        error: "username does not exists"
+      });
+    } 
+    else {
+      const match = await bcrypt.compare(password, users[0].password);
+      //if the password is unchanged
+      if(match) {
+        temp = db('User').where({
+          id: userId
+        }).update({
+          username: username,
+          email: email
+        });
+      }
+      else {
+        bcrypt.hash(password, saltRounds, function (err, hash) {
+        // Store hash in your password DB.
+          temp = db('User').where({
+            id: userId
+          }).update({
+            username: username,
+            password: hash,
+            email: email,
+            updated_at: date
+          });
+        });
+      }
+      res.json({
+        message: "User successfully updated"
       });
     }
   },
