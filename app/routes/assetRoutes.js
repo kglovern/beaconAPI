@@ -1,20 +1,28 @@
 const path = require('path');
 const Router = require('express').Router();
-const controller = require(path.join(__ctrl, 'UserController'));
-const verifyMyToken = require('../routes/verifyMyToken');
+const controller = require(path.join(__ctrl, 'AssetController'));
+let upload = controller.upload();
 
 /* ROUTE: '/asset'
- * Available verbs: get, post, patch, delete
+ * Available verbs: get, post, delete
  */
-Router.post('/', verifyMyToken, controller.createAsset);
+//Router.post('/', upload, controller.createAsset);
 
-Router.get('/:assetId', verifyMyToken, controller.getAssetInfo);
+ /**
+  *  Upload a new asset to the system
+  */
+Router.post('/', upload.single('file'), controller.createAsset);
 
-Router.delete('/:assetId', verifyMyToken, controller.deleteAsset);
 /**
- *  Get all projects for which the user is an owner or editor
- *  @param id:Int -> Identifier for the user
+ *  Get an asset from the system
+ *  @param assetId -> the identifier for the specified asset
  */
-//Router.get('/:id/projects', controller.getUserProjects);
+Router.get('/:assetId', controller.getAssetInfo);
+
+/**
+ *  Delete an asset from the system
+ *  @param assetId -> the identifier for the specified asset
+ */
+Router.delete('/:assetId', controller.deleteAsset);
 
 module.exports = Router;

@@ -85,7 +85,7 @@ module.exports = {
     }
   },
   /**
-   * deleteProjectByID: Delete a specific project and all related information 
+   * deleteProjectByID: Delete a specific project and all related information
    * @param req:Request -> Request meta data
    * @param res:Response -> Response object
    * @param: params.id:Int -> ID corresponding to the project ID
