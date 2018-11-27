@@ -22,5 +22,15 @@ Router.post('/:id/editor', controller.addEditorToProject);
  *  @param id -> Project.id: identifier for the project
  */
 Router.delete('/:id/editor/:editorId', controller.removeEditorFromProject);
+/**
+ *  Create a new project
+ *  @param body.userId:Int -> userId to identify project owner
+ */
+Router.post('/', controller.createProject);
+/**
+ *  Update the values of a single project
+ *  @param id -> Project.id: identifier for the project to update
+ */
+Router.patch('/:id', controller.updateProjectById);
 
 module.exports = Router;

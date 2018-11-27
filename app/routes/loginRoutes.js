@@ -4,7 +4,7 @@ const controller = require('../controllers/LoginController');
 /* ROUTE: '/logins'
  * Available verbs: get, post
  */
-Router.get('/', controller.authenticate);
+Router.post('/', controller.authenticate);
 
 
 module.exports = Router;

@@ -6,31 +6,34 @@ const bcrypt = require('bcryptjs');
 module.exports = {
   authenticate: async (req, res) => {
     //can't have '' in the fields
-    username = req.query.username;
+    username = req.body.username;
     //can't start with the $
-    password = req.query.password;
+    password = req.body.password;
 
     //GET USER FROM DB
-    user = await db.from('User').select().where({
-      username: username
-    });
+    user = await db.from('User')
+      .select(['id', 'password', 'is_active'])
+      .where({
+        username: username
+      })
+      .first();
 
-    if (user.length == 0) {
-      res.sendStatus(403);
+    if (!user) {
+      res.sendStatus(401);
     } else {
-      const match = await bcrypt.compare(password, user[0].password);
-      console.log(user[0]);
-      if (match && user[0].is_active) {
+      const match = await bcrypt.compare(password, user.password);
+      if (match && user.is_active) {
         const token = jwt.sign({
           user: user.id
         }, 'secret');
         res.json({
           message: 'Authenticated',
-          token: token
+          token: token,
+          userId: user.id
         });
       } else {
-        res.sendStatus(403);
+        res.sendStatus(401);
       }
-  }
-}
-}
+    }
+  },
+};

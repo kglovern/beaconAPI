@@ -3,6 +3,62 @@ const db = require(path.join(__model, 'database'));
 
 module.exports = {
   /**
+   * createProject: Create a new project from form data
+   * @param req:Request -> Request meta data
+   * @param res:Response -> Response object
+   */
+  createProject: async (req, res) => {
+    const userId = req.body.user_id;
+    try {
+      let project = await db('Project')
+        .insert({
+          owner_id: userId,
+          name: req.body.name,
+          width: req.body.width,
+          height: req.body.height,
+          is_active: true,
+        });
+      const projectId = project;
+      // Associate user with project as editor
+      const editor = await db('ProjectEditor')
+        .insert({
+          user_id: userId,
+          project_id: projectId
+        });
+      // Now query and return the new project so meta data is available to the user.  Wow this is expensive.
+      project = await db('Project')
+        .select()
+        .where('id', projectId);
+      res.send(project);
+    } catch (e) {
+      console.log(e);
+      res.status(500).send('Critical failure when creating a new project object');
+    }
+  },
+  /**
+   * updateProjectById: patch an existing project from form data
+   * @param req:Request -> Request meta data
+   * @param res:Response -> Response object
+   * @param: params.id:Int -> ID corresponding to the project ID
+   */
+  updateProjectById: async (req, res) => {
+    const projectId = req.params.id;
+    try {
+      const project = await db('Project')
+        .where('id', projectId)
+        .update({
+          name: req.body.name,
+          width: req.body.width,
+          height: req.body.height,
+          is_active: req.body.is_active
+        });
+      res.status(200).send();
+    } catch (e) {
+      console.log(e);
+      res.status(500).send('Critical failure editing project with id ' + req.params.id);
+    }
+  },
+  /**
    * getProjectById: Retrieve data for a single project and return it as a JSON object
    * @param req:Request -> Request meta data
    * @param res:Response -> Response object
@@ -23,7 +79,7 @@ module.exports = {
       }
     } catch (e) {
       console.log(e);
-      res.status(503).send({
+      res.status(500).send({
         err: 'Critical failure trying to retrieve project with id ' + req.params.id
       });
     }
@@ -43,7 +99,7 @@ module.exports = {
       res.status(200).send();
     } catch (e) {
       console.log(e);
-      res.status(503).send({
+      res.status(500).send({
         err: 'Critical failure while deleting project with id ' + req.params.id
       });
     };
@@ -68,7 +124,7 @@ module.exports = {
       res.send(editor);
     } catch (e) {
       console.log(e);
-      res.status(503).send({
+      res.status(500).send({
         err: 'Error adding editor to project'
       });
     }
@@ -88,7 +144,7 @@ module.exports = {
       res.status(200).send();
     } catch (e) {
       console.log(e);
-      res.status(503).send({
+      res.status(500).send({
         err: 'Unable to remove editor with id ' + req.params.editorId + ' from project'
       });
     }

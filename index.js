@@ -11,10 +11,17 @@ global.__uploads = path.join(__dirname, 'uploads/');
 
 const app = express();
 
+// CORS headers to allow cross-domain access
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Added body-parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: false
 }));
 
 const PORT = process.env.PORT || 3000;
