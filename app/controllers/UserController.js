@@ -115,7 +115,7 @@ module.exports = {
       res.status(503).send({
         error: "username does not exists"
       });
-    } 
+    }
     else {
       const match = await bcrypt.compare(password, users[0].password);
       //if the password is unchanged
@@ -145,7 +145,7 @@ module.exports = {
       });
     }
   },
-  /**  Get all projects in which a user has editor privileges for 
+  /**  Get all projects in which a user has editor privileges for
    *  @param req:Request -> Request meta data
    *  @param res:Response -> Response object
    *  @param id:Int -> user.id join ProjectEditor.user_id
@@ -155,7 +155,8 @@ module.exports = {
       const projects = await db('Project')
         .select()
         .leftOuterJoin('ProjectEditor','ProjectEditor.project_id', 'Project.id')
-        .where('ProjectEditor.user_id', req.params.id);
+        .where('ProjectEditor.user_id', req.params.id)
+        .orderBy('updated_at', "DESC");
       res.send(projects);
     } catch (e) {
       console.log(e);
