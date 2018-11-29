@@ -161,12 +161,7 @@ module.exports = {
             .from('ProjectEditor')
             .where('user_id', userId)
         })
-        //.distinct('id');
-      /*const projects = await db({p: 'Project', pe: 'ProjectEditor'})
-        .select('p.*', 'pe.*')
-        .where('pe.user_id', userId)
-        .orderBy('updated_at', "DESC")
-        .distinct('p.id');*/
+        .orderBy('updated_at', "DESC");
       res.send(projects);
     } catch (e) {
       console.log(e);
