@@ -152,11 +152,21 @@ module.exports = {
    */
   getUserProjects: async (req, res) => {
     try {
+      const userId = req.params.id;
+
       const projects = await db('Project')
         .select()
-        .leftOuterJoin('ProjectEditor','ProjectEditor.project_id', 'Project.id')
-        .where('ProjectEditor.user_id', req.params.id)
-        .orderBy('updated_at', "DESC");
+        .whereIn('id', (b) => {
+          b.select('project_id')
+            .from('ProjectEditor')
+            .where('user_id', userId)
+        })
+        //.distinct('id');
+      /*const projects = await db({p: 'Project', pe: 'ProjectEditor'})
+        .select('p.*', 'pe.*')
+        .where('pe.user_id', userId)
+        .orderBy('updated_at', "DESC")
+        .distinct('p.id');*/
       res.send(projects);
     } catch (e) {
       console.log(e);
