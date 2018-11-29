@@ -25,6 +25,14 @@ module.exports = {
           user_id: userId,
           project_id: projectId
         });
+      // Add a default first frame
+      await db('Frame')
+        .insert({
+          project_id: projectId,
+          position: 1,
+          bg_colour: 'FFFFFF',
+          transition_time: 30
+        })
       // Now query and return the new project so meta data is available to the user.  Wow this is expensive.
       project = await db('Project')
         .select()
@@ -148,5 +156,30 @@ module.exports = {
         err: 'Unable to remove editor with id ' + req.params.editorId + ' from project'
       });
     }
+  },
+  /**
+   * getEntireProjectById: Retrieve ALL data for a single project and return it as a JSON object
+   * @param req:Request -> Request meta data
+   * @param res:Response -> Response object
+   * @param: params.id:Int -> ID corresponding to the project ID
+   */
+  getEntireProjectById: async (req, res) => {
+    const projectId = req.params.id;
+    // Initial Project Details
+    let projectDetails = await db('Project')
+      .select()
+      .where('id', projectId)
+      .first();
+    // All frames
+    const frames = await db('Frame')
+      .select()
+      .where('project_id', projectId);
+    projectDetails.frames = frames;
+    // All assets
+    const assets = await db('Asset')
+      .select()
+      .where('project_id', projectId);
+    projectDetails.assets = assets;
+    res.send(projectDetails);
   }
 };

@@ -8,6 +8,11 @@ const controller = require(path.join(__ctrl, 'ProjectController'));
  */
 Router.get('/:id', controller.getProjectById);
 /**
+ *  Get data blob to set up client editor for a single project
+ *  @param id -> projectId: identifier for the project
+ */
+Router.get('/:id/init', controller.getEntireProjectById);
+/**
  *  Delete entry for a single project
  *  @param id -> Project.id: identifier for the project
  */
