@@ -1,6 +1,5 @@
 const path = require('path');
-const jwt = require('jsonwebtoken');
-const verifyMyToken = require('../routes/verifyMyToken');
+
 const fs = require('fs');
 const db = require(path.join(__model, 'database'));
 const multer = require('multer');
@@ -8,11 +7,12 @@ const multer = require('multer');
 //create the storage engine
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    filepath = __uploads + req.body.owner_id;
-    if(!fs.existsSync(filepath)){
-      fs.mkdir(filepath);
+    const filepath = __uploads;
+    cb(null, filepath)
+    /*if(!fs.existsSync(filepath)){
+      fs.mkdir(filepath, cb(null, filepath));
     }
-    cb(null, filepath);
+    cb(null, filepath);*/
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + '.' + path.extname(file.originalname));
@@ -34,6 +34,7 @@ module.exports = {
        */
       createAsset: async (req, res) => {
         console.log(req.file);
+        console.log(req.body)
         project_id = req.body.project_id
         if(!project_id){
             res.status(503).send({
@@ -88,12 +89,13 @@ module.exports = {
           .insert({
             project_id: project_id,
             owner_id: owner_id,
-            filepath: filepath,
+            filepath: __uploads + '/' + name,
             name: name,
             type: file.encoding,
             file_size: file.size,
             is_shared: is_shared
           });
+          res.send(result)
         }
         catch (e) {
          console.log(e);
