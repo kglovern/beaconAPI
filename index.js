@@ -33,5 +33,5 @@ app.use('/v1', routes);
 
 /* Serve */
 app.listen(PORT, () => {
-  console.log('We in this bitch on port ' + PORT);
+  console.log('Listening on port ' + PORT);
 });
